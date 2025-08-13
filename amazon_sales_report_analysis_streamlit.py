@@ -1,4 +1,6 @@
 # Amazon Sales SKU Classification Streamlit App
+import pandas as pd
+import numpy as np
 import streamlit as st
 
 # Page configuration
