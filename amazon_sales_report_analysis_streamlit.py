@@ -91,6 +91,8 @@ elif nav == 'SKU Classification':
     st.header("🎯 SKU Performance Prediction")
 
     # Region selection
+    REGIONS = ["North", "South", "East", "West"]
+
     st.markdown("### Step 1: Select Target Region")
     selected_region = st.selectbox("Choose the region for prediction:", REGIONS, index=0)
 
@@ -177,9 +179,8 @@ elif nav == 'Data Analysis':
 
     with col1:
         # Category distribution
-        category_counts = pd.DataFrame({
-            'Category': df['Category'],
-            'Count': df['Category'].value_counts()
+        category_counts = df['Category'].value_counts().reset_index()
+        category_counts.columns = ['Category', 'Count']
         })
 
         fig1 = px.bar(category_counts, x='Category', y='Count',
