@@ -116,6 +116,8 @@ elif nav == 'SKU Classification':
     PROMOTION = [0,1]
     FULFILLMENT = ["Amazon", "Merchant"]
     SALES_CHANNEL = ["Amazon.in", "Non-Amazon"]
+    SIZES = ['S','M', 'L', 'XL', 'XXL', '3XL', 'XS', 'Free', '4XL', '5XL', '6XL']
+    B2B_OPTIONS = [True, False]
 
     with col1:
         category = st.selectbox("Product Category:", CATEGORIES, index=0)
@@ -251,16 +253,17 @@ elif nav == 'Data Analysis':
         'West': lr_model3      # Your West region model
     }
     # Get actual importance from your models
-    importance_scores = get_feature_importance_from_models(actual_models, feature_names)
-
+    for region, model in actual_models.items():
+    coeffs = np.abs(model.coef_[0])
+    feature_names_region = region_feature_names[region]  # define per-region
     feature_importance = pd.DataFrame({
-        'Feature': feature_names,
-        'Importance': importance_scores
+        'Feature': feature_names_region,
+        'Importance': coeffs
     })
-
-    fig4 = px.bar(feature_importance, x='Importance', y='Feature', orientation='h',
-                 title='Feature Importance for SKU Classification (Based on Coefficient Magnitudes)')
-    st.plotly_chart(fig4, use_container_width=True)
+    st.subheader(f"Feature Importance - {region}")
+    fig = px.bar(feature_importance, x='Importance', y='Feature', orientation='h',
+                 title=f"Feature Importance for {region}")
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # Footer
