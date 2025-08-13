@@ -112,13 +112,18 @@ elif nav == 'SKU Classification':
 
     col1, col2 = st.columns(2)
 
+    CATEGORIES = ["Blouse", "Bottom", "Dupatta", "Ethnic Dress", "kurta", "Saree", "Set", "Top", "Western Dress"]
+    PROMOTION = [0,1]
+    FULFILLMENT = ["Amazon", "Merchant"]
+    SALES_CHANNEL = ["Amazon.in", "Non-Amazon"]
+
     with col1:
         category = st.selectbox("Product Category:", CATEGORIES, index=0)
         size = st.selectbox("Size:", SIZES, index=6)  # Default to 'L'
         b2b = st.selectbox("B2B:", B2B_OPTIONS, index=1)  # Default to 'FALSE'
 
     with col2:
-        promotion_ids = st.selectbox("Promotion IDs:", PROMOTION_IDS, index=0)
+        promotion_ids = st.selectbox("Promotion IDs:", PROMOTION, index=0)
         fulfillment = st.selectbox("Fulfillment:", FULFILLMENT, index=0)  # Default to 'Amazon'
         sales_channel = st.selectbox("Sales Channel:", SALES_CHANNEL, index=0)  # Default to 'Amazon.in'
 
@@ -186,7 +191,7 @@ elif nav == 'Data Analysis':
         fig1 = px.bar(category_counts, x='Category', y='Count',
                      title='SKU Distribution by Category',
                      color='Count', color_continuous_scale='viridis')
-        fig1.update_xaxis(tickangle=45)
+        fig1.update_xaxes(tickangle=45)
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
