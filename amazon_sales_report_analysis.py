@@ -612,6 +612,9 @@ from sklearn.preprocessing import LabelEncoder
 import plotly.express as px
 import plotly.graph_objects as go
 
+# Page configuration
+st.set_page_config(page_title="Amazon SKU Classifier", page_icon="📦", layout="wide")
+
 all_regional_data = pd.concat([
     N_df.assign(Region='North'),
     S_df.assign(Region='South'),
@@ -619,8 +622,6 @@ all_regional_data = pd.concat([
     W_df.assign(Region='West')
 ], ignore_index=True)
 
-# Page configuration
-st.set_page_config(page_title="Amazon SKU Classifier", page_icon="📦", layout="wide")
 
 # Title and description
 st.title("📦 Amazon Sales SKU Classifier")
