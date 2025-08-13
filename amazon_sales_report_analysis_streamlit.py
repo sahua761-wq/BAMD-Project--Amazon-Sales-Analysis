@@ -181,7 +181,7 @@ elif nav == 'Data Analysis':
         # Category distribution
         category_counts = df['Category'].value_counts().reset_index()
         category_counts.columns = ['Category', 'Count']
-        })
+        
 
         fig1 = px.bar(category_counts, x='Category', y='Count',
                      title='SKU Distribution by Category',
