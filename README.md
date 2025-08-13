@@ -1,0 +1,1 @@
+Business case:- In each region of India (North, South, East and West), predict whether an SKU of a particular Category and size will have high or low demand
