@@ -254,16 +254,16 @@ elif nav == 'Data Analysis':
     }
     # Get actual importance from your models
     for region, model in actual_models.items():
-    coeffs = np.abs(model.coef_[0])
-    feature_names_region = region_feature_names[region]  # define per-region
-    feature_importance = pd.DataFrame({
-        'Feature': feature_names_region,
-        'Importance': coeffs
-    })
-    st.subheader(f"Feature Importance - {region}")
-    fig = px.bar(feature_importance, x='Importance', y='Feature', orientation='h',
-                 title=f"Feature Importance for {region}")
-    st.plotly_chart(fig, use_container_width=True)
+        coeffs = np.abs(model.coef_[0])
+        feature_names_region = region_feature_names[region]  # define per-region
+        feature_importance = pd.DataFrame({
+            'Feature': feature_names_region,
+            'Importance': coeffs
+        })
+        st.subheader(f"Feature Importance - {region}")
+        fig = px.bar(feature_importance, x='Importance', y='Feature', orientation='h',
+                     title=f"Feature Importance for {region}")
+        st.plotly_chart(fig, use_container_width=True)
 
 
 # Footer
