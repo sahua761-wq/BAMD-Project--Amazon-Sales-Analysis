@@ -151,7 +151,7 @@ region_dfs = {region: df[df['Region'] == region] for region in df['Region'].uniq
 """## North"""
 
 N_df = region_dfs['North'].groupby(
-    ['Category', 'Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
+    ['Category', 'Size', 'B2B','promotion_flag', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
     as_index=False
 ).agg({
     'Qty': 'sum',
@@ -171,7 +171,7 @@ plt.show()
 
 N_df.info()
 
-cat_cols = ['Category', 'Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by']
+cat_cols = ['Category', 'Size', 'B2B', 'Fulfilment', 'Sales Channel ', 'fulfilled-by']
 N_df[cat_cols] = N_df[cat_cols].astype('category')
 
 """### One Hot Encoding"""
@@ -467,7 +467,7 @@ print(results_df)
 """
 
 S_df = region_dfs['South'].groupby(
-    ['Category','Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
+    ['Category','Size', 'B2B','promotion_flag', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
     as_index=False
 ).agg({
     'Qty': 'sum',
@@ -483,7 +483,7 @@ S_df['Volume_Class'] = pd.qcut(
 sns.countplot(x='Volume_Class', data=S_df, order=[0, 1], palette='viridis')
 plt.show()
 
-cat_cols = ['Category', 'Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by']
+cat_cols = ['Category', 'Size', 'B2B', 'Fulfilment', 'Sales Channel ', 'fulfilled-by']
 S_df[cat_cols] = S_df[cat_cols].astype('category')
 
 #Create Independent and Dependent Variables
@@ -515,7 +515,7 @@ print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y2
 """## West"""
 
 W_df = region_dfs['West'].groupby(
-    ['Category', 'Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
+    ['Category', 'Size', 'B2B','promotion_flag', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
     as_index=False
 ).agg({
     'Qty': 'sum',
@@ -562,7 +562,7 @@ print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y3
 """## East"""
 
 E_df = region_dfs['East'].groupby(
-    ['Category', 'Size', 'B2B','promotion-ids', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
+    ['Category', 'Size', 'B2B','promotion_flag', 'Fulfilment', 'Sales Channel ', 'fulfilled-by'],
     as_index=False
 ).agg({
     'Qty': 'sum',
