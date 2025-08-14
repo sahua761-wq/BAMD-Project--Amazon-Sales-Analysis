@@ -607,4 +607,4 @@ prediction_probE[prediction_probE <= 0.4] = 0
 print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y4_test, prediction_probE, target_names=['Low', 'High']))
 
 # Export variables so Streamlit can use them
-__all__ = ["N_df", "S_df", "E_df", "W_df", "lr_model", "lr_model2", "lr_model3", "lr_model4", "df"]
+__all__ = ["N_df", "S_df", "E_df", "W_df", "lr_model", "lr_model2", "lr_model3", "lr_model4", "df", "X1", "X2", "X3", "X4"]
