@@ -264,7 +264,7 @@ elif nav == 'Data Analysis':
 
         for region, model in models.items():
             # Get absolute values of coefficients
-            coeffs = model.feature_importance_  # model.coef_[0] for binary classification
+            coeffs = model.feature_importances_  # model.coef_[0] for binary classification
             all_coefficients.append(coeffs)
 
         # Average coefficients across all regions
@@ -294,7 +294,7 @@ elif nav == 'Data Analysis':
     }
 
     def aggregate_feature_importance(model, columns, original_features):
-        coeffs = model.features_importance_
+        coeffs = model.feature_importances_
         
          # make sure columns and coeffs have same length
         if len(columns) != len(coeffs):
