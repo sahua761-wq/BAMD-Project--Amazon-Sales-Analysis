@@ -233,7 +233,7 @@ pillow @ file:///C:/b/abs_95ls_qh4c2/croot/pillow_1714398870615/work
 pkce @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pkce_1699482718905/work
 pkginfo @ file:///C:/b/abs_bciypal17m/croot/pkginfo_1715696027839/work
 platformdirs==4.2.2
-plotly @ file:///C:/b/abs_9asyl7560v/croot/plotly_1718136949929/work
+plotly==5.16.1
 pluggy @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/pluggy_1699472504117/work
 ply @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/ply_1699473999871/work
 prometheus-client @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/prometheus_client_1699495496669/work
