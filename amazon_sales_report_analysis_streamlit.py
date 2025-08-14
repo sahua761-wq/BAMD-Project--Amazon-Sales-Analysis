@@ -296,6 +296,15 @@ elif nav == 'Data Analysis':
 
     def aggregate_feature_importance(model, columns, original_features):
         coeffs = np.abs(model.coef_[0])
+        
+         # make sure columns and coeffs have same length
+        if len(columns) != len(coeffs):
+            print(f"Warning: length mismatch! columns={len(columns)}, coeffs={len(coeffs)}")
+            # take min length to avoid crash
+            min_len = min(len(columns), len(coeffs))
+            columns = columns[:min_len]
+            coeffs = coeffs[:min_len]
+
         df = pd.DataFrame({'col': columns, 'coef': coeffs})
 
         aggregated = {}
