@@ -10,7 +10,7 @@ from sklearn.preprocessing import LabelEncoder
 import plotly.express as px
 import plotly.graph_objects as go
 
-from model_training import N_df, S_df, E_df, W_df, lr_model, lr_model2, lr_model3, lr_model4, df
+from model_training import X1, X2, X3, X4, N_df, S_df, E_df, W_df, lr_model, lr_model2, lr_model3, lr_model4, df
 
 
 all_regional_data = pd.concat([
@@ -119,6 +119,39 @@ elif nav == 'SKU Classification':
     SIZES = ['S','M', 'L', 'XL', 'XXL', '3XL', 'XS', 'Free', '4XL', '5XL', '6XL']
     B2B_OPTIONS = [True, False]
 
+    def encode_region_features(region, category, size, b2b, promotion_ids, fulfillment, sales_channel):
+        if region == 'North':
+            cols = X1.columns  # Import X1 from model_training.py
+        elif region == 'South':
+            cols = X2.columns
+        elif region == 'East':
+            cols = X3.columns
+        elif region == 'West':
+            cols = X4.columns
+
+        # Create DataFrame with one row
+        df_input = pd.DataFrame([{
+            'Category': category,
+            'Size': size,
+            'B2B': b2b,
+            'Promotion IDs': promotion_ids,
+            'Fulfillment': fulfillment,
+            'Sales Channel': sales_channel
+        }])
+
+        # One-hot encode
+        df_encoded = pd.get_dummies(df_input)
+
+        # Add missing columns (set to 0)
+        for col in cols:
+            if col not in df_encoded.columns:
+                df_encoded[col] = 0
+
+        # Reorder columns to match training
+        df_encoded = df_encoded[cols]
+
+        return df_encoded
+
     with col1:
         category = st.selectbox("Product Category:", CATEGORIES, index=0)
         size = st.selectbox("Size:", SIZES, index=6)  # Default to 'L'
@@ -139,7 +172,7 @@ elif nav == 'SKU Classification':
     with col2:
         if st.button("🚀 Predict SKU Performance", type="primary", use_container_width=True):
             # Encode features
-            encoded_features = encode_features(category, size, b2b, promotion_ids, fulfillment, sales_channel)
+            encoded_features = encode_region_features(selected_region, category, size, b2b, promotion_ids, fulfillment, sales_channel)
 
             # Make prediction (replace with your actual prediction logic)
             prediction = model.predict([encoded_features])[0]
@@ -253,6 +286,7 @@ elif nav == 'Data Analysis':
         'West': lr_model3      # Your West region model
     }
     # Get actual importance from your models
+    region_feature_names = ["North", "South", "East", "West"]
     for region, model in actual_models.items():
         coeffs = np.abs(model.coef_[0])
         feature_names_region = region_feature_names[region]  # define per-region
