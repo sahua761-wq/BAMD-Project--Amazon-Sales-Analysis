@@ -175,8 +175,8 @@ elif nav == 'SKU Classification':
             encoded_features = encode_region_features(selected_region, category, size, b2b, promotion_ids, fulfillment, sales_channel)
 
             # Make prediction (replace with your actual prediction logic)
-            prediction = model.predict([encoded_features])[0]
-            prediction_proba = model.predict_proba([encoded_features])[0]
+            prediction = model.predict(encoded_features)[0]
+            prediction_proba = model.predict_proba(encoded_features)[0]
 
             st.success("Prediction Complete!")
 
@@ -286,7 +286,13 @@ elif nav == 'Data Analysis':
         'West': lr_model3      # Your West region model
     }
     # Get actual importance from your models
-    region_feature_names = ["North", "South", "East", "West"]
+    region_feature_names = {
+        "North": ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
+        "South": ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
+        "East":  ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
+        "West":  ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel']
+    }
+    
     for region, model in actual_models.items():
         coeffs = np.abs(model.coef_[0])
         feature_names_region = region_feature_names[region]  # define per-region
