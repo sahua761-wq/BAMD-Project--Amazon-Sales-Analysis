@@ -124,9 +124,9 @@ elif nav == 'SKU Classification':
         elif region == 'South':
             cols = X2.columns
         elif region == 'East':
-            cols = X3.columns
-        elif region == 'West':
             cols = X4.columns
+        elif region == 'West':
+            cols = X3.columns
 
         # Create DataFrame with one row
         df_input = pd.DataFrame([{
