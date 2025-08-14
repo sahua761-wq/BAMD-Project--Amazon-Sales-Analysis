@@ -280,29 +280,42 @@ elif nav == 'Data Analysis':
     feature_names = ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel']
 
     actual_models = {
-        'North': lr_model,     # Your North region model
-        'South': lr_model2,    # Your South region model
-        'East': lr_model4,     # Your East region model
-        'West': lr_model3      # Your West region model
+        'North': lr_model,   # Your North region model
+        'South': lr_model2,
+        'East': lr_model4,
+        'West': lr_model3
     }
-    # Get actual importance from your models
-    region_feature_names = {
-        "North": ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
-        "South": ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
-        "East":  ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel'],
-        "West":  ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel']
+
+    # Training columns per region (from pd.get_dummies)
+    region_columns = {
+        "North": X1.columns,
+        "South": X2.columns,
+        "East": X3.columns,
+        "West": X4.columns
     }
-    
-    for region, model in actual_models.items():
+
+    def aggregate_feature_importance(model, columns, original_features):
         coeffs = np.abs(model.coef_[0])
-        feature_names_region = region_feature_names[region]  # define per-region
-        feature_importance = pd.DataFrame({
-            'Feature': feature_names_region,
-            'Importance': coeffs
+        df = pd.DataFrame({'col': columns, 'coef': coeffs})
+
+        aggregated = {}
+        for feat in original_features:
+            # sum coefficients of all columns that start with the feature name
+            aggregated[feat] = df[df['col'].str.contains(feat)]['coef'].sum()
+
+        return pd.DataFrame({
+            'Feature': list(aggregated.keys()),
+            'Importance': list(aggregated.values())
         })
+
+    # Loop over regions and show feature importance
+    for region, model in actual_models.items():
+        cols = region_columns[region]  # training columns for this region
+        feature_importance = aggregate_feature_importance(model, cols, feature_names)
+
         st.subheader(f"Feature Importance - {region}")
         fig = px.bar(feature_importance, x='Importance', y='Feature', orientation='h',
-                     title=f"Feature Importance for {region}")
+                    title=f"Feature Importance for {region}")
         st.plotly_chart(fig, use_container_width=True)
 
 
