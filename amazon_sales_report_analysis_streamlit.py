@@ -9,7 +9,7 @@ st.set_page_config(page_title="Amazon SKU Classifier", page_icon="📦", layout=
 import plotly.express as px
 import plotly.graph_objects as go
 
-from model_training import X1, X2, X3, X4, N_df, S_df, E_df, W_df, lr_model, lr_model2, lr_model3, lr_model4, df
+from model_training import X1, X2, X3, X4, N_df, S_df, E_df, W_df, rnd_clf, rnd_clf2, rnd_clf3, rnd_clf4, df
 
 
 all_regional_data = pd.concat([
@@ -26,9 +26,9 @@ st.subheader("Predicting SKU Performance in Indian Regions")
 
 # Add description
 st.markdown("""
-This application classifies SKUs based on whether they will sell more than 2 quantities in a specific region.
-- **Class 0**: SKU will sell 2 or fewer quantities
-- **Class 1**: SKU will sell more than 2 quantities
+This application classifies SKUs based on whether they will sell more than 10 quantities in a specific region.
+- **Class 0**: SKU will sell 10 or fewer quantities
+- **Class 1**: SKU will sell more than 10 quantities
 """)
 
 # Sidebar for navigation
@@ -70,10 +70,10 @@ if nav == 'Home':
         region_percentages = region_stats.div(region_stats.sum(axis=1), axis=0) * 100
 
         fig = go.Figure(data=[
-            go.Bar(name='Class 0 (≤2 quantities)',
+            go.Bar(name='Class 0 (≤10 quantities)',
                   x=region_percentages.index,
                   y=region_percentages[0] if 0 in region_percentages.columns else [0]*len(region_percentages)),
-            go.Bar(name='Class 1 (>2 quantities)',
+            go.Bar(name='Class 1 (>10 quantities)',
                   x=region_percentages.index,
                   y=region_percentages[1] if 1 in region_percentages.columns else [0]*len(region_percentages))
         ])
@@ -98,13 +98,13 @@ elif nav == 'SKU Classification':
     st.markdown(f"**Selected Region:** {selected_region}")
     st.divider()
     if selected_region == 'North':
-        model = lr_model
+        model = rnd_clf
     elif selected_region == 'South':
-        model = lr_model2
+        model = rnd_clf2
     elif selected_region == 'West':
-        model = lr_model3
+        model = rnd_clf3
     elif selected_region == 'East':
-        model = lr_model4
+        model = rnd_clf4
 
     # Input form
     st.markdown("### Step 2: Enter Product Details")
@@ -185,10 +185,10 @@ elif nav == 'SKU Classification':
             with col_result1:
                 if prediction == 1:
                     st.success(f"**Prediction: Class {prediction}**")
-                    st.write("✅ This SKU is predicted to sell **MORE than 2 quantities** in the selected region.")
+                    st.write("✅ This SKU is predicted to sell **MORE than 10 quantities** in the selected region.")
                 else:
                     st.warning(f"**Prediction: Class {prediction}**")
-                    st.write("⚠️ This SKU is predicted to sell **2 or FEWER quantities** in the selected region.")
+                    st.write("⚠️ This SKU is predicted to sell **10 or FEWER quantities** in the selected region.")
 
             with col_result2:
                 st.markdown("**Prediction Confidence:**")
@@ -279,10 +279,10 @@ elif nav == 'Data Analysis':
     feature_names = ['Category', 'Size', 'B2B', 'Promotion IDs', 'Fulfillment', 'Sales Channel']
 
     actual_models = {
-        'North': lr_model,   # Your North region model
-        'South': lr_model2,
-        'East': lr_model4,
-        'West': lr_model3
+        'North': rnd_clf,   # Your North region model
+        'South': rnd_clf2,
+        'East': rnd_clf4,
+        'West': rnd_clf3
     }
 
     # Training columns per region (from pd.get_dummies)

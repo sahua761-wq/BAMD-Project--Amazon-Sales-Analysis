@@ -158,7 +158,7 @@ N_df = region_dfs['North'].groupby(
     'Amount': 'sum'
 })
 
-N_df['Qty'].describe()
+print(N_df['Qty'].describe())
 
 N_df['Volume_Class'] = pd.qcut(
     N_df['Qty'],
@@ -406,7 +406,7 @@ for mdl in [lr_model, bestCtree, bestCtree_cp, rnd_clf, ext_clf, ada_clf, xgb_cl
                                                                          precision,
                                                                          recall))
 
-"""### Hence Logistic Regression will be used for all other datasets"""
+"""### Hence RandomForestClassifier will be used for all other datasets"""
 
 #Try different Threshold and check precision and recall
 prediction_prob = lr_model.predict_proba(X1_test)[:,1]
@@ -459,9 +459,7 @@ for theta in np.arange(0.0, 1.05, 0.05):
 results_df = pd.DataFrame(results)
 print(results_df)
 
-"""### Threshold ≈ 0.35–0.40 seems optimal — high enough precision to avoid too many wrong positives, recall still solid, and revenue from true positives remains high while revenue from false positives is lower.
-
-### Hence we will be going ahead with threshold of 0.4 for other regions as well
+"""### We will be going ahead with RandomForestClassifier, which has the highest accuracy, precision and recall
 
 ## South
 """
@@ -500,17 +498,35 @@ print(X2_test.shape)
 print(y2_train.shape)
 print(y2_test.shape)
 
-# Fit logistic regression
-lr_model2 = LogisticRegression()
-lr_model2.fit(X2_train,y2_train)
+#Create an object for random forest classifier- assumes DecisionTree
+rnd_clf2 = RandomForestClassifier(
+    n_estimators = 500,
+    max_depth = 10,
+    n_jobs = -1,
+    random_state = 0
+)
 
-prediction_probS = lr_model2.predict_proba(X2_test)[:,1]
-type(prediction_probS)
-#predictions_threshold =
-prediction_probS[prediction_probS > 0.4] = 1
-prediction_probS[prediction_probS <= 0.4] = 0
+#Fit the model
+rnd_clf2.fit(X2_train, y2_train)
 
-print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y2_test, prediction_probS, target_names=['Low', 'High']))
+#predict using the model
+rf_pred2 = rnd_clf2.predict(X2_test)
+
+#Check the accuracy score
+print(accuracy_score(y2_test, rf_pred2))
+
+#print feature importance
+features = X2_test.columns
+importances = rnd_clf.feature_importances_
+indices = np.argsort(importances)[::-1][:10]
+
+plt.title('Feature Importances')
+plt.barh(range(len(indices)), importances[indices], color='b', align='center')
+plt.yticks(range(len(indices)), [features[i] for i in indices])
+plt.xlabel('Relative Importance')
+plt.show()
+
+print(classification_report(y2_test, rf_pred2, target_names=['Low', 'High']))
 
 """## West"""
 
@@ -547,17 +563,34 @@ print(X3_test.shape)
 print(y3_train.shape)
 print(y3_test.shape)
 
-# Fit logistic regression
-lr_model3 = LogisticRegression()
-lr_model3.fit(X3_train,y3_train)
+rnd_clf3 = RandomForestClassifier(
+    n_estimators = 500,
+    max_depth = 10,
+    n_jobs = -1,
+    random_state = 0
+)
 
-prediction_probW = lr_model3.predict_proba(X3_test)[:,1]
-type(prediction_probW)
-#predictions_threshold =
-prediction_probW[prediction_probW > 0.4] = 1
-prediction_probW[prediction_probW <= 0.4] = 0
+#Fit the model
+rnd_clf3.fit(X3_train, y3_train)
 
-print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y3_test, prediction_probW, target_names=['Low', 'High']))
+#predict using the model
+rf_pred3 = rnd_clf3.predict(X3_test)
+
+#Check the accuracy score
+print(accuracy_score(y3_test, rf_pred3))
+
+#print feature importance
+features = X3_test.columns
+importances = rnd_clf.feature_importances_
+indices = np.argsort(importances)[::-1][:10]
+
+plt.title('Feature Importances')
+plt.barh(range(len(indices)), importances[indices], color='b', align='center')
+plt.yticks(range(len(indices)), [features[i] for i in indices])
+plt.xlabel('Relative Importance')
+plt.show()
+
+print(classification_report(y3_test, rf_pred3, target_names=['Low', 'High']))
 
 """## East"""
 
@@ -594,17 +627,34 @@ print(X4_test.shape)
 print(y4_train.shape)
 print(y4_test.shape)
 
-# Fit logistic regression
-lr_model4 = LogisticRegression()
-lr_model4.fit(X4_train,y4_train)
+rnd_clf4 = RandomForestClassifier(
+    n_estimators = 500,
+    max_depth = 10,
+    n_jobs = -1,
+    random_state = 0
+)
 
-prediction_probE = lr_model4.predict_proba(X4_test)[:,1]
-type(prediction_probE)
-#predictions_threshold =
-prediction_probE[prediction_probE > 0.4] = 1
-prediction_probE[prediction_probE <= 0.4] = 0
+#Fit the model
+rnd_clf4.fit(X4_train, y4_train)
 
-print("\n Logistic Regression 0.4 threshold Report:\n", classification_report(y4_test, prediction_probE, target_names=['Low', 'High']))
+#predict using the model
+rf_pred4 = rnd_clf4.predict(X4_test)
+
+#Check the accuracy score
+print(accuracy_score(y4_test, rf_pred4))
+
+#print feature importance
+features = X4_test.columns
+importances = rnd_clf.feature_importances_
+indices = np.argsort(importances)[::-1][:10]
+
+plt.title('Feature Importances')
+plt.barh(range(len(indices)), importances[indices], color='b', align='center')
+plt.yticks(range(len(indices)), [features[i] for i in indices])
+plt.xlabel('Relative Importance')
+plt.show()
+
+print(classification_report(y4_test, rf_pred4, target_names=['Low', 'High']))
 
 # Export variables so Streamlit can use them
-__all__ = ["N_df", "S_df", "E_df", "W_df", "lr_model", "lr_model2", "lr_model3", "lr_model4", "df", "X1", "X2", "X3", "X4"]
+__all__ = ["N_df", "S_df", "E_df", "W_df", "rnd_clf", "rnd_clf2", "rnd_clf3", "rnd_clf4", "df", "X1", "X2", "X3", "X4"]
